@@ -59,6 +59,43 @@ window.SwaggerUi = Backbone.Router.extend({
     this.headerView.on('update-swagger-ui', function(data) {
       return that.updateSwaggerUi(data);
     });
+
+    // use Backbone for history
+    // kudos to http://artsy.github.io/blog/2012/06/25/replacing-hashbang-routes-with-pushstate/
+    if (this.options.uiRoot) {
+      this.uiRoot = this.options.uiRoot;
+      // TODO ensure '/' at the end
+      delete this.options.uiRoot;
+    } else {
+        this.uiRoot = '/';
+    }
+
+    //$(function() {
+      // ininitialize on dom-ready
+      Backbone.history.start({ pushState: true, root: that.uiRoot });
+    //});
+
+    // Globally capture clicks. If they are internal and not in the pass
+    // through list, route them through Backbone's navigate method.
+    $(document).on("click","a[href^='" + this.uiRoot + "']", function(event) {
+      var href = $(event.currentTarget).attr('href');
+
+      // chain 'or's for other black list routes
+      var passThrough = false; // href.indexOf('sign_out') >= 0;
+
+      // Allow shift+click for new tabs, etc.
+      if (!passThrough && !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+        event.preventDefault();
+
+        // Remove leading slashes and hash bangs (backward compatablility)
+        var url = href.replace(/^\//,'').replace('\#\!\/','');
+
+        // Instruct Backbone to trigger routing events
+        that.navigate(url, { trigger: true });
+
+        return false
+      }
+    });
   },
 
   // Set an option after initializing

@@ -85,6 +85,7 @@ if (Function.prototype.bind && console && typeof console.log === "object") {
 window.Docs = {
 
 	shebang: function() {
+		// TODO eliminate shebang!
 
 		// If shebang has an operation nickname in it..
 		// e.g. /docs/#!/words/get_search

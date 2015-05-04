@@ -11,6 +11,7 @@ SwaggerUi.Views.ResourceView = Backbone.View.extend({
     if (this.model.description) {
       this.model.summary = this.model.description;
     }
+    this.model.uiRoot = Backbone.history.root;
   },
 
   render: function(){

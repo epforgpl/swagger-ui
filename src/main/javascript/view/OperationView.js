@@ -19,6 +19,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     this.parentId = this.model.parentId;
     this.nickname = this.model.nickname;
     this.model.encodedParentId = encodeURIComponent(this.parentId);
+    this.model.uiRoot = Backbone.history.root;
     return this;
   },
 
