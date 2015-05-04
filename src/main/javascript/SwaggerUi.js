@@ -70,11 +70,6 @@ window.SwaggerUi = Backbone.Router.extend({
         this.uiRoot = '/';
     }
 
-    //$(function() {
-      // ininitialize on dom-ready
-      Backbone.history.start({ pushState: true, root: that.uiRoot });
-    //});
-
     // Globally capture clicks. If they are internal and not in the pass
     // through list, route them through Backbone's navigate method.
     $(document).on("click","a[href^='" + this.uiRoot + "']", function(event) {
@@ -91,11 +86,39 @@ window.SwaggerUi = Backbone.Router.extend({
         var url = href.replace(/^\//,'').replace('\#\!\/','');
 
         // Instruct Backbone to trigger routing events
-        that.navigate(url, { trigger: true });
+        that.navigate(url, { trigger: false });
 
         return false
       }
     });
+  },
+
+  routes: {
+    ":resource":            "resource",
+    ":resource/:operation": "operation"
+  },
+
+  // Expand all operations for the resource and scroll to it
+  resource: function(resource) {
+    Docs.expandEndpointListForResource(resource);
+
+    var dom_id = 'resource_' + resource;
+    $("#" + dom_id).slideto({highlight: false});
+  },
+
+  operation: function(resource, operation) {
+    // Expand Resource
+    Docs.expandEndpointListForResource(resource);
+
+    var dom_id = 'resource_' + resource;
+    $("#"+dom_id).slideto({highlight: false});
+
+    // Expand operation
+    var li_dom_id = resource + '_' + operation;
+    var li_content_dom_id = li_dom_id + "_content";
+
+    Docs.expandOperation($('#' + li_content_dom_id));
+    $('#' + li_dom_id).slideto({highlight: false});
   },
 
   // Set an option after initializing
@@ -167,11 +190,11 @@ window.SwaggerUi = Backbone.Router.extend({
     }
     this.renderGFM();
 
-    if (this.options.onComplete){
+    Backbone.history.start({ pushState: true, root: this.uiRoot });
+
+    if (this.options.onComplete) {
       this.options.onComplete(this.api, this);
     }
-
-    setTimeout(Docs.shebang.bind(this), 100);
   },
 
   buildUrl: function(base, url){
