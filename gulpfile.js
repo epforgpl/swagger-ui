@@ -104,7 +104,7 @@ gulp.task('copy', ['less'], function() {
 
   // copy all files inside html folder
   gulp
-    .src(['./src/main/html/**/*'])
+    .src(['./src/main/html/**/*','./src/main/html/.htaccess'])
     .pipe(gulp.dest('./dist'))
     .on('error', log);
 });
