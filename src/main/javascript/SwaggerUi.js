@@ -72,7 +72,7 @@ window.SwaggerUi = Backbone.Router.extend({
 
     // Globally capture clicks. If they are internal and not in the pass
     // through list, route them through Backbone's navigate method.
-    $(document).on("click","a[href^='" + this.uiRoot + "']", function(event) {
+    $(document).on("click","a[href^='/']", function(event) {
       var href = $(event.currentTarget).attr('href');
 
       // chain 'or's for other black list routes
