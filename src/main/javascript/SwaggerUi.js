@@ -64,8 +64,11 @@ window.SwaggerUi = Backbone.Router.extend({
     // kudos to http://artsy.github.io/blog/2012/06/25/replacing-hashbang-routes-with-pushstate/
     if (this.options.uiRoot) {
       this.uiRoot = this.options.uiRoot;
-      // TODO ensure '/' at the end
+      if (this.uiRoot.slice(-1) != '/') {
+        this.uiRoot += '/';
+      }
       delete this.options.uiRoot;
+      
     } else {
         this.uiRoot = '/';
     }

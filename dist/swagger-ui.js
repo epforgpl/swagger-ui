@@ -70,8 +70,11 @@ window.SwaggerUi = Backbone.Router.extend({
     // kudos to http://artsy.github.io/blog/2012/06/25/replacing-hashbang-routes-with-pushstate/
     if (this.options.uiRoot) {
       this.uiRoot = this.options.uiRoot;
-      // TODO ensure '/' at the end
+      if (this.uiRoot.slice(-1) != '/') {
+        this.uiRoot += '/';
+      }
       delete this.options.uiRoot;
+      
     } else {
         this.uiRoot = '/';
     }
@@ -20826,7 +20829,6 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     this.parentId = this.model.parentId;
     this.nickname = this.model.nickname;
     this.model.encodedParentId = encodeURIComponent(this.parentId);
-    this.model.uiRoot = this.router.uiRoot;
     return this;
   },
 
@@ -21606,7 +21608,6 @@ SwaggerUi.Views.ResourceView = Backbone.View.extend({
     if (this.model.description) {
       this.model.summary = this.model.description;
     }
-    this.model.uiRoot = this.router.uiRoot;
   },
 
   render: function(){
