@@ -67,7 +67,7 @@ window.SwaggerUi = Backbone.Router.extend({
     // kudos to http://artsy.github.io/blog/2012/06/25/replacing-hashbang-routes-with-pushstate/
     if (this.options.uiRoot) {
       this.uiRoot = this.options.uiRoot;
-      if (this.uiRoot.slice(-1) != '/') {
+      if (this.uiRoot.slice(-1) !== '/') {
         this.uiRoot += '/';
       }
       delete this.options.uiRoot;
@@ -78,7 +78,7 @@ window.SwaggerUi = Backbone.Router.extend({
 
     // Globally capture clicks. If they are internal and not in the pass
     // through list, route them through Backbone's navigate method.
-    $(document).on("click","a[href^='/']", function(event) {
+    $(document).on('click','a[href^="/"]:not([data-bypass])', function(event) {
       var href = $(event.currentTarget).attr('href');
 
       // chain 'or's for other black list routes
@@ -94,14 +94,14 @@ window.SwaggerUi = Backbone.Router.extend({
         // Instruct Backbone to trigger routing events
         that.navigate(url, { trigger: false });
 
-        return false
+        return false;
       }
     });
   },
 
   routes: {
-    ":resource":            "resource",
-    ":resource/:operation": "operation"
+    ':resource':            'resource',
+    ':resource/:operation': 'operation'
   },
 
   // Expand all operations for the resource and scroll to it
@@ -109,7 +109,7 @@ window.SwaggerUi = Backbone.Router.extend({
     Docs.expandEndpointListForResource(resource);
 
     var dom_id = 'resource_' + resource;
-    $("#" + dom_id).slideto({highlight: false});
+    $('#' + dom_id).slideto({highlight: false});
   },
 
   operation: function(resource, operation) {
@@ -117,11 +117,11 @@ window.SwaggerUi = Backbone.Router.extend({
     Docs.expandEndpointListForResource(resource);
 
     var dom_id = 'resource_' + resource;
-    $("#"+dom_id).slideto({highlight: false});
+    $('#' + dom_id).slideto({highlight: false});
 
     // Expand operation
     var li_dom_id = resource + '_' + operation;
-    var li_content_dom_id = li_dom_id + "_content";
+    var li_content_dom_id = li_dom_id + '_content';
 
     Docs.expandOperation($('#' + li_content_dom_id));
     $('#' + li_dom_id).slideto({highlight: false});
